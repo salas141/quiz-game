@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yarışma Admin Paneli</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function startGame() {
+      socket.emit('startGame');
+      document.getElementById('startButton').disabled = true;
+    }
+
+    function nextQuestion() {
+      socket.emit('nextQuestion');
+    }
+
+    // Soruların bitiminde doğru cevabı ve sonuçları göster
+    socket.on('questionEnded', (data) => {
+      const correctAnswer = data.correctAnswer;
+      const answers = data.answers;
+      let resultHTML = `<h2>Doğru Cevap: ${["A", "B", "C"][correctAnswer]}</h2>`;
+      answers.forEach(answer => {
+        resultHTML += `<p>${answer.name}: ${["A", "B", "C"][answer.answer]} 
+                        ${answer.isCorrect ? "(Doğru)" : "(Yanlış)"}</p>`;
+      });
+      document.getElementById('result').innerHTML = resultHTML;
+
+      // Güncellenmiş puanları göster
+      let scoreboardHTML = "<h2>Puan Tablosu:</h2><ul>";
+      data.players.forEach(player => {
+        scoreboardHTML += `<li>${player.name}: ${player.score} Puan</li>`;
+      });
+      scoreboardHTML += "</ul>";
+      document.getElementById('scoreboard').innerHTML = scoreboardHTML;
+    });
+  </script>
+</head>
+<body>
+  <h1>Yarışma Yönetimi</h1>
+  <button id="startButton" onclick="startGame()">Yarışmayı Başlat</button>
+  <button onclick="nextQuestion()">Sonraki Soruya Geç</button>
+  
+  <div id="result"></div> <!-- Sonuçlar ve doğru cevaplar buraya gelecek -->
+  <div id="scoreboard"></div> <!-- Puan Tablosu -->
+</body>
+</html>

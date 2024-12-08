@@ -1,0 +1,144 @@
+/* Genel Ayarlar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #f7f7f7;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.question-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.question-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.options {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.options li {
+  margin: 10px 0;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  display: inline-block;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+label:hover {
+  background-color: #f0f0f0;
+}
+
+label.selected {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  margin: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
+#result {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+#result h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+#nextButton {
+  margin-top: 20px;
+}
+
+/* Küçük Ekranlar İçin Responsive Tasarım */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .question-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .options li {
+    font-size: 1.1rem;
+  }
+
+  #result {
+    width: 100%;
+    max-width: 100%;
+  }
+}
