@@ -9,27 +9,37 @@
     const socket = io();
     let playerName;
 
-    // Yarışmacı ismi girildikten sonra
+    // Sayfa yüklendiğinde oyuncunun ismini alması için
     window.onload = () => {
-      playerName = prompt("Lütfen adınızı giriniz:");
-      socket.emit('playerJoined', playerName);
+      // Oyuncu ismi girilmesi için bir input ve buton oluşturuyoruz
+      document.getElementById('startGameForm').style.display = 'block'; // Formu göster
+
+      // Giriş yap butonuna tıklanınca ismi gönder
+      document.getElementById('submitNameButton').addEventListener('click', function() {
+        playerName = document.getElementById('playerNameInput').value.trim();
+        if (playerName) {
+          socket.emit('playerJoined', playerName);  // Oyuncunun ismini sunucuya gönder
+          document.getElementById('startGameForm').style.display = 'none'; // Formu gizle
+          document.getElementById('waitingMessage').style.display = 'block'; // Bekleme mesajını göster
+        } else {
+          alert("Lütfen geçerli bir isim girin.");
+        }
+      });
     };
 
-    // Soru geldiğinde
+    // Oyun başladığında soruyu ve seçenekleri göster
     socket.on('gameStarted', (data) => {
       const question = data.question;
-      const questionIndex = data.questionIndex;
       document.getElementById('question').textContent = question.question;
       document.getElementById('optionA').textContent = question.options[0];
       document.getElementById('optionB').textContent = question.options[1];
       document.getElementById('optionC').textContent = question.options[2];
       startTimer();
-      document.getElementById('correctAnswer').textContent = '';  // Doğru cevabı temizle
     });
 
+    // Zamanlayıcıyı başlat
     let timer;
     let timeLeft = 30;
-
     function startTimer() {
       timeLeft = 30;
       timer = setInterval(() => {
@@ -42,6 +52,7 @@
       }, 1000);
     }
 
+    // Cevap gönder
     function submitAnswer(answerIndex) {
       socket.emit('answer', answerIndex);
     }
@@ -54,20 +65,32 @@
   </script>
 </head>
 <body>
-  <h1 id="question"></h1>
-  <div>
-    <input type="radio" id="A" name="answer" onclick="submitAnswer(0)">
-    <label id="optionA"></label>
+  <div id="startGameForm">
+    <h2>Oyuncu İsmini Girin</h2>
+    <input type="text" id="playerNameInput" placeholder="İsminizi girin...">
+    <button id="submitNameButton">Giriş Yap</button>
   </div>
-  <div>
-    <input type="radio" id="B" name="answer" onclick="submitAnswer(1)">
-    <label id="optionB"></label>
+
+  <div id="waitingMessage" style="display: none;">
+    <h3>Yarışma başlamak için admin'in 'Yarışmayı Başlat' butonuna basmasını bekleyin...</h3>
   </div>
-  <div>
-    <input type="radio" id="C" name="answer" onclick="submitAnswer(2)">
-    <label id="optionC"></label>
+
+  <h1 id="question" style="display:none;"></h1>
+  <div id="options" style="display:none;">
+    <div>
+      <input type="radio" id="A" name="answer" onclick="submitAnswer(0)">
+      <label id="optionA"></label>
+    </div>
+    <div>
+      <input type="radio" id="B" name="answer" onclick="submitAnswer(1)">
+      <label id="optionB"></label>
+    </div>
+    <div>
+      <input type="radio" id="C" name="answer" onclick="submitAnswer(2)">
+      <label id="optionC"></label>
+    </div>
   </div>
-  <div id="timer"></div>
-  <div id="correctAnswer"></div> <!-- Doğru cevabın görüneceği alan -->
+  <div id="timer" style="display:none;"></div>
+  <div id="correctAnswer"></div>
 </body>
 </html>
